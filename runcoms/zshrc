@@ -29,3 +29,4 @@ function java_use() {
         export PATH=$JAVA_HOME/bin:$PATH
             java -version
           }
+export EDITOR="vim"
