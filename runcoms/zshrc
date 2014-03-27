@@ -12,3 +12,20 @@ fi
 
 # Customize to your needs...
 
+alias gs='git status'
+alias vi="vim"
+alias be="bundle exec"
+alias gfcas="ssh geoforce@gf2-app1-staging.geoforce.net -t 'source /etc/profile && /shared/geoforce/rails/current/script/console staging'"
+alias gfcap="ssh geoforce@gf2-app1-prod.geoforce.net -t 'source /etc/profile && /shared/geoforce/rails/current/script/console production'"
+alias gfcus="ssh geoforce@gf2-util1-staging.geoforce.net -t 'source /etc/profile && /shared/geoforce/rails/current/script/console staging'"
+alias gfcup="ssh geoforce@gf2-util1-prod.geoforce.net -t 'source /etc/profile && /shared/geoforce/rails/current/script/console production'"
+alias tma='tmux attach -d -t'
+alias pwd-tmux='tmux new -s $(basename $(pwd))'
+
+alias java_ls='/usr/libexec/java_home -V 2>&1 | grep -E "\d.\d.\d_\d\d" | cut -d , -f 1 | colrm 1 4 | grep -v Home'
+
+function java_use() {
+    export JAVA_HOME=$(/usr/libexec/java_home -v $1)
+        export PATH=$JAVA_HOME/bin:$PATH
+            java -version
+          }
