@@ -12,8 +12,38 @@ fi
 
 # Customize to your needs...
 
+function set_term_bgcolor {
+  local R=$1
+  local G=$2
+  local B=$3
+  /usr/bin/osascript <<EOF
+tell application "iTerm"
+  tell the current terminal
+    tell the current session
+      set background color to {$(($R*65535/255)), $(($G*65535/255)), $(($B*65535/255))}
+    end tell
+  end tell
+end tell
+EOF
+}
+
+function ssh {
+  if [[ "$@" =~ prod ]]; then
+    set_term_bgcolor 40 0 0
+  elif [[ "$@" =~ staging ]]; then
+    set_term_bgcolor 210 210 128
+  fi
+  command ssh $@
+  reset_term_color
+}
+
+function reset_term_color {
+  set_term_bgcolor 0 30 39
+}
+
 alias gs='git status'
 alias vi="vim"
+alias nv="nvim"
 alias be="bundle exec"
 alias gfcas="ssh geoforce@gf2-app1-staging.geoforce.net -t 'source /etc/profile && /shared/geoforce/rails/current/script/console staging'"
 alias gfcap="ssh geoforce@gf2-app1-prod.geoforce.net -t 'source /etc/profile && /shared/geoforce/rails/current/script/console production'"
@@ -21,6 +51,15 @@ alias gfcus="ssh geoforce@gf2-util1-staging.geoforce.net -t 'source /etc/profile
 alias gfcup="ssh geoforce@gf2-util1-prod.geoforce.net -t 'source /etc/profile && /shared/geoforce/rails/current/script/console production'"
 alias tma='tmux attach -d -t'
 alias pwd-tmux='tmux new -s $(basename $(pwd))'
+alias a='fasd -a'        # any
+alias s='fasd -si'       # show / search / select
+alias d='fasd -d'        # directory
+alias f='fasd -f'        # file
+alias sd='fasd -sid'     # interactive directory selection
+alias sf='fasd -sif'     # interactive file selection
+alias z='fasd_cd -d'     # cd, same functionality as j in autojump
+alias zz='fasd_cd -d -i' # cd with interactive selection
+
 source $HOME/.homesick/repos/homeshick/homeshick.sh
 unalias homeshick
 alias java_ls='/usr/libexec/java_home -V 2>&1 | grep -E "\d.\d.\d_\d\d" | cut -d , -f 1 | colrm 1 4 | grep -v Home'
@@ -31,4 +70,10 @@ function java_use() {
   java -version
 }
 
+
+zstyle ':completion:*' accept-exact '*(N)'
+zstyle ':completion:*' use-cache on
+zstyle ':completion:*' cache-path ~/.zsh/cache
+
 export EDITOR="vim"
+export PATH="$PATH:/usr/local/share/npm/bin:/Users/dkatten/bin"
