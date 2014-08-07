@@ -20,4 +20,3 @@ if (( $+commands[fortune] )); then
   print
 fi
 
-echo '.zlogin'
